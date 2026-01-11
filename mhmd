@@ -1,0 +1,40 @@
+import os
+import shutil
+
+# 1. إنشاء المجلدات
+os.makedirs("All_Images", exist_ok=True)
+os.makedirs("All_Docs", exist_ok=True)
+
+# 2. الحصول على قائمة بكل الملفات اللي قدام عيونك (في السطح)
+files_right_here = os.listdir(".")
+
+print("🧹 جاري تنظيف السطح الآن يا حمودة...\n")
+
+for filename in files_right_here:
+    # تخطي المجلدات والأداة نفسها
+    if os.path.isdir(filename) or filename == "hammouda.py" or filename == "porganize.py":
+        continue
+
+    # تحديد المسار القديم
+    old_path = filename
+    dest_folder = None
+
+    # تصنيف حسب النوع
+    if filename.lower().endswith((".jpg", ".png", ".jpeg")):
+        dest_folder = "All_Images"
+    elif filename.lower().endswith((".txt", ".pdf", ".docx")):
+        dest_folder = "All_Docs"
+
+    # إذا لقينا مجلد مناسب، انقل الملف
+    if dest_folder:
+        new_path = os.path.join(dest_folder, filename)
+        
+        # حماية من التكرار
+        if os.path.exists(new_path):
+            name, ext = os.path.splitext(filename)
+            new_path = os.path.join(dest_folder, f"{name}_new{ext}")
+            
+        shutil.move(old_path, new_path)
+        print(f"✅ تم سحب الملف للداخل: {filename}")
+
+print("\n✨ السطح صار يلمع! مبروك يا بطل.")
